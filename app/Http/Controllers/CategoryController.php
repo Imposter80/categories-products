@@ -24,11 +24,14 @@ class CategoryController extends Controller
         $products = Product::all();
         $categoriesQuery = Category::query();
 
+
         if($request->filled('search')){
 
             $categoriesQuery->where('categoryname', 'like' , "%$request->search%")->orWhere('categorydescription', 'like' , "%$request->search%");
         }
-        $categories = $categoriesQuery->orderBy('created_at', 'desc')->simplepaginate(10)->withPath("?".$request->getQueryString());
+        //$categories = $categoriesQuery->orderBy('created_at', 'desc')->simplepaginate(10)->withPath("?".$request->getQueryString());
+        $categories = $categoriesQuery->orderBy('created_at', 'desc')->get();
+
 
         foreach ($categories as $c){
             $amount=0;
@@ -44,19 +47,61 @@ class CategoryController extends Controller
             $c->amount_product = $amount;
             $c->sum_product = $sum;
         }
-        if($request->filled('price_from')){
 
+        if($request->filled('price_from')){
+            $temp= array();
+
+                 foreach ($categories as $elementKey => $element) {
+
+                if ($element->sum_product >= $request->price_from) {
+                    $temp[] = $element;
+                }
+
+            }
+            $categories = $temp;
         }
+        if($request->filled('price_to')){
+            $temp= array();
+
+            foreach ($categories as $elementKey => $element) {
+
+                if ($element->sum_product <= $request->price_to) {
+                    $temp[] = $element;
+                }
+
+            }
+            $categories = $temp;
+        }
+
         if($request->filled('count_from')){
+            $temp= array();
+
+            foreach ($categories as $elementKey => $element) {
+
+                if ($element->amount_product >= $request->count_from) {
+                    $temp[] = $element;
+                }
+
+            }
+            $categories = $temp;
 
         }
         if($request->filled('count_to')){
+            $temp= array();
 
+            foreach ($categories as $elementKey => $element) {
+
+                if ($element->amount_product <= $request->count_to) {
+                    $temp[] = $element;
+                }
+
+            }
+            $categories = $temp;
         }
 
 
 
-        return View('category.index', compact('categories') );
+        return View('category.index', compact('categories'));
 
 
     }

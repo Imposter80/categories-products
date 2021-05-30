@@ -80,7 +80,7 @@
             </table>
 
     </div>
-    {{$categories->links()}}
+
 @endsection
 
 
