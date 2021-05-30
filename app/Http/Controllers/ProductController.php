@@ -7,6 +7,7 @@ use App\Models\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
+
 class ProductController extends Controller
 {
     /**
@@ -18,7 +19,11 @@ class ProductController extends Controller
     {
         $categories = Category::pluck('categoryname','id');
         $products = Product::orderBy('created_at', 'desc')->simplepaginate(10);
-        return View('product.index', compact('categories'),compact('products'));
+        foreach ($products as $p){
+           $p->category_name = $categories[$p->categoryid];
+        }
+
+        return View('product.index', compact('products'));
 
     }
 

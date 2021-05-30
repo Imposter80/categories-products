@@ -16,7 +16,7 @@
         <div class="filters row" style="padding: 10px">
             <div class="row" style="padding: 5px">
                 <label for="search">Поиск:
-                    <input type="text" name="search" id="search" size="25">
+                    <input type="text" name="search" id="search" size="25" value="{{request()->search}}">
                 </label>
             </div>
             <div class="col-sm-12 col-md-12" style="padding: 5px">
@@ -46,43 +46,29 @@
             <table class="table" id="table_id">
                 <thead>
                 <tr>
-                    <th scope="col">Название</th>
-                    <th scope="col">Описание</th>
+                    <th scope="col">@sortablelink('categoryname')</th>
+                    <th scope="col">@sortablelink('categorydescription')</th>
                     <th scope="col">Сумма</th>
                     <th scope="col">Количество</th>
-                    <th scope="col">Дата</th>
+                    <th scope="col">@sortablelink('created_at')</th>
                     <th scope="col">Операции</th>
                 </tr>
                 </thead>
-                @if($products->count())
-                @foreach($categories as $c)
+
+                @foreach($categories as $key=>$category)
                 <tr>
-                    <td>{{$c->categoryname}}</td>
-                    <td>{{$c->categorydescription}}</td>
 
-                    @php
-                      $count=0;
-                      $sum=0;
-                    @endphp
+                    <td>{{$category->categoryname}}</td>
+                    <td>{{$category->categorydescription}}</td>
 
-                    @foreach($products as $p)
-                        @if($c->id == $p->categoryid)
-                            @php
-                                $count++;
-                                $sum+= $p->price;
-                            @endphp
-                        @endif
-                    @endforeach
+                    <td>{{$category->sum_product}}</td>
+                    <td>{{$category->amount_product}}</td>
 
-                    <td>{{$sum}}</td>
-                    <td>{{$count}}</td>
-
-                    <td>{{$c->created_at->format('d-m-Y')}}</td>
+                    <td>{{$category->created_at->format('d-m-Y')}}</td>
 
                     <td>
-                        <a href="{{ route('category.edit', $c->id)}}" class="btn btn-primary btn-sm">Edit</a>
-                        <form action="{{ route('category.destroy',$c->id) }}" method="POST" style="display: inline-block">
-
+                        <a href="{{ route('category.edit', $category->id)}}" class="btn btn-primary btn-sm">Edit</a>
+                        <form action="{{ route('category.destroy',$category->id) }}" method="POST" style="display: inline-block">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
@@ -90,7 +76,7 @@
                     </td>
                 </tr>
                 @endforeach
-                @endif
+
             </table>
 
     </div>

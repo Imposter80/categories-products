@@ -10,6 +10,7 @@ use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use DataTables;
 
+
 class CategoryController extends Controller
 {
     /**
@@ -19,14 +20,31 @@ class CategoryController extends Controller
      */
     public function index(Request $request) // показывает все
     {
+
+        $products = Product::all();
         $categoriesQuery = Category::query();
+
         if($request->filled('search')){
-            $categoriesQuery->where('categoryname', '==' , $request->search);
+
+            $categoriesQuery->where('categoryname', 'like' , "%$request->search%")->orWhere('categorydescription', 'like' , "%$request->search%");
+        }
+        $categories = $categoriesQuery->orderBy('created_at', 'desc')->simplepaginate(10)->withPath("?".$request->getQueryString());
+
+        foreach ($categories as $c){
+            $amount=0;
+            $sum=0;
+            foreach ($products as $p) {
+
+                if($c->id == $p->categoryid){
+                    $amount++;
+                    $sum+= $p->price;
+                }
+            }
+
+            $c->amount_product = $amount;
+            $c->sum_product = $sum;
         }
         if($request->filled('price_from')){
-
-        }
-        if($request->filled('price_to')){
 
         }
         if($request->filled('count_from')){
@@ -36,10 +54,10 @@ class CategoryController extends Controller
 
         }
 
-        $products = Product::all();
-        $categories = $categoriesQuery->orderBy('created_at', 'desc')->simplepaginate(10);
 
-        return View('category.index', compact('categories'),compact('products') );
+
+        return View('category.index', compact('categories') );
+
 
     }
 

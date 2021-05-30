@@ -29,11 +29,9 @@
                     <td>{{$p->productname}}</td>
                     <td>{{$p->productdescription}}</td>
                     <td>{{$p->price}}</td>
-                    <td>{{$categories[$p->categoryid]}}</td>
+                    <td>{{$p->category_name}}</td>
                     <td>{{$p->created_at->format('d-m-Y')}}</td>
-
                     <td>
-
                         <a href="{{ route('product.edit', $p->id)}}" class="btn btn-primary btn-sm">Edit</a>
                         <form action="{{ route('product.destroy',$p->id) }}" method="POST" style="display: inline-block">
 

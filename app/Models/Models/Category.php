@@ -12,9 +12,30 @@ class Category extends Model
     use HasFactory;
     protected $primaryKey='id';
     protected $table='categories';
-    protected $sum=0;
-    protected $count=0;
+
+    public function getAmountProductAttribute($value)
+    {
+        return ($value);
+    }
+
+    public function setAmountProductAttribute($value)
+    {
+        $this->attributes['amount_product'] =($value);
+    }
+
+    public function getSumProductAttribute($value)
+    {
+        return ($value);
+    }
+
+    public function setSumProductAttribute($value)
+    {
+        $this->attributes['sum_product'] =($value);
+    }
+
+
     protected $fillable=['categoryname', 'categorydescription','created_at', 'updated_at'];
 
     public $sortable = [ 'categoryname', 'categorydescription', 'created_at'];
+
 }
