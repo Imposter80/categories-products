@@ -12,6 +12,34 @@
     </div>
     <a href="{{url('product/create')}}" class="btn btn-success">Создать товар</a>
 
+    <form method="GET" action="{{ route('product.index')}}">
+        <div class="filters row" style="padding: 10px">
+            <div class="row" style="padding: 5px">
+                <label for="search">Поиск:
+                    <input type="text" name="search" id="search" size="34" placeholder="Введите текст для поиска" value="{{request()->search}}">
+                </label>
+            </div>
+            <div class="col-sm-12 col-md-12" style="padding: 5px">
+                <label for="price_from">Цена от:
+                    <input type="number" name="price_from" id="price_from" step="0.01" style="width: 7em"  value="{{request()->price_from}}">
+                </label>
+                <label for="price_to">до:
+                    <input type="number" name="price_to" id="price_to" step="0.01" style="width: 7em" value="{{request()->price_to}}">
+                </label>
+            </div>
+            <div class="col-sm-4 col-md-4" style="padding: 5px">
+                <label for="categoryid">Категория:</label>
+                {!! Form::select('categoryid', $categories, null, ['placeholder' => 'Выберите категорию'], ['class'=>'col-sm-2 col-md-2 col-lg-2'])!!}
+            </div>
+
+            <div class="col-sm-12 col-md-12" style="padding: 5px">
+                <button type="submit" class="btn btn-primary">Применить</button>
+            </div>
+        </div>
+    </form>
+
+
+
     <div class="row">
         <table class="table">
             <thead>
@@ -45,7 +73,7 @@
         </table>
 
     </div>
-    {{$products->links()}}
+
 @endsection
 
 

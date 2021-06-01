@@ -16,23 +16,23 @@
         <div class="filters row" style="padding: 10px">
             <div class="row" style="padding: 5px">
                 <label for="search">Поиск:
-                    <input type="text" name="search" id="search" size="25" value="{{request()->search}}">
+                    <input type="text" name="search" id="search" size="34" placeholder="Введите текст для поиска" value="{{request()->search}}">
                 </label>
             </div>
             <div class="col-sm-12 col-md-12" style="padding: 5px">
                 <label for="price_from">Сумма от:
-                   <input type="text" name="price_from" id="price_from" size="6">
+                   <input type="number" name="price_from" id="price_from" step="0.01" style="width: 7em"  value="{{request()->price_from}}">
                 </label>
                 <label for="price_to">до:
-                    <input type="text" name="price_to" id="price_to" size="6">
+                    <input type="number" name="price_to" id="price_to" step="0.01" style="width: 7em" value="{{request()->price_to}}">
                 </label>
             </div>
             <div class="col-sm-12 col-md-12" style="padding: 5px">
                 <label for="count_from">Количество от:
-                    <input type="text" name="count_from" id="count_from" size="4">
+                    <input type="number" name="count_from" id="count_from" style="width: 6em" value="{{request()->count_from}}">
                 </label>
                 <label for="count_to">до:
-                    <input type="text" name="count_to" id="count_to" size="4">
+                    <input type="number" name="count_to" id="count_to" style="width: 6em" value="{{request()->count_to}}">
                 </label>
             </div>
             <div class="col-sm-8 col-md-8" style="padding: 5px">
@@ -46,11 +46,11 @@
             <table class="table" id="table_id">
                 <thead>
                 <tr>
-                    <th scope="col">@sortablelink('categoryname')</th>
-                    <th scope="col">@sortablelink('categorydescription')</th>
+                    <th scope="col">Название</th>
+                    <th scope="col">Описание</th>
                     <th scope="col">Сумма</th>
                     <th scope="col">Количество</th>
-                    <th scope="col">@sortablelink('created_at')</th>
+                    <th scope="col">Дата</th>
                     <th scope="col">Операции</th>
                 </tr>
                 </thead>

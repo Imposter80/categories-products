@@ -15,15 +15,50 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $categories = Category::pluck('categoryname','id');
-        $products = Product::orderBy('created_at', 'desc')->simplepaginate(10);
+        $productsQuery = Product::query();
+
+        if($request->filled('search')){
+            $productsQuery->where('productname', 'like' , "%$request->search%")->orWhere('productdescription', 'like' , "%$request->search%");
+        }
+        $products = $productsQuery->orderBy('created_at', 'desc')->get();
+
+
         foreach ($products as $p){
            $p->category_name = $categories[$p->categoryid];
         }
 
-        return View('product.index', compact('products'));
+        if($request->filled('price_from') || $request->filled('price_to') || $request->filled('categoryid') ){
+
+            foreach ($products as $elementKey => $element) {
+
+                if ($request->filled('price_from')){
+                    if ($element->price < $request->price_from) {
+                        unset($products[$elementKey]);
+                    }
+                }
+                if ($request->filled('price_to')){
+                    if ($element->price > $request->price_to) {
+                        unset($products[$elementKey]);
+                    }
+                }
+                if ($request->filled('categoryid')){
+                    if ($element->categoryid != $request->categoryid) {
+                        unset($products[$elementKey]);
+                    }
+                }
+            }
+
+            // dd($products);
+        }
+
+
+
+        //dd($request);
+
+        return View('product.index',compact('categories'), compact('products'));
 
     }
 

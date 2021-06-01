@@ -162,12 +162,15 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
+
 
 
         /*
          * Package Service Providers...
          */
+        Yajra\DataTables\DataTablesServiceProvider::class,
+        Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
+
         Laravel\Tinker\TinkerServiceProvider::class,
         /*
          * Application Service Providers...

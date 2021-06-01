@@ -5,16 +5,15 @@ namespace App\Models\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class Product extends Model
 {
-   // use HasFactory;
+    use HasFactory;
+    use Sortable;
 
     protected $primaryKey='id';
     protected $table='products';
-
-    protected $fillable=['categoryid', 'productname', 'productdescription', 'price','created_at', 'updated_at'];
-
 
     public function getCategoryNameAttribute($value)
     {
@@ -25,5 +24,11 @@ class Product extends Model
         $this->attributes['category_name'] = ($value);
     }
 
+    protected $fillable=['categoryid', 'productname', 'productdescription', 'price','created_at', 'updated_at'];
+
+
+
+
+    //public $sortable = [ 'productname', 'productdescription','price','category_name', 'created_at'];
 
 }

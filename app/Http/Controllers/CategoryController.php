@@ -29,7 +29,7 @@ class CategoryController extends Controller
 
             $categoriesQuery->where('categoryname', 'like' , "%$request->search%")->orWhere('categorydescription', 'like' , "%$request->search%");
         }
-        //$categories = $categoriesQuery->orderBy('created_at', 'desc')->simplepaginate(10)->withPath("?".$request->getQueryString());
+
         $categories = $categoriesQuery->orderBy('created_at', 'desc')->get();
 
 
@@ -48,63 +48,41 @@ class CategoryController extends Controller
             $c->sum_product = $sum;
         }
 
-        if($request->filled('price_from')){
-            $temp= array();
-
-                 foreach ($categories as $elementKey => $element) {
-
-                if ($element->sum_product >= $request->price_from) {
-                    $temp[] = $element;
-                }
-
-            }
-            $categories = $temp;
-        }
-        if($request->filled('price_to')){
-            $temp= array();
+        if($request->filled('price_from') || $request->filled('price_to') || $request->filled('count_from') ||$request->filled('count_to')){
 
             foreach ($categories as $elementKey => $element) {
 
-                if ($element->sum_product <= $request->price_to) {
-                    $temp[] = $element;
+                if ($request->filled('price_from')){
+                    if ($element->sum_product < $request->price_from) {
+                        unset($categories[$elementKey]);
+                    }
                 }
-
-            }
-            $categories = $temp;
-        }
-
-        if($request->filled('count_from')){
-            $temp= array();
-
-            foreach ($categories as $elementKey => $element) {
-
-                if ($element->amount_product >= $request->count_from) {
-                    $temp[] = $element;
+                if ($request->filled('price_to')){
+                    if ($element->sum_product > $request->price_to) {
+                        unset($categories[$elementKey]);
+                    }
                 }
-
-            }
-            $categories = $temp;
-
-        }
-        if($request->filled('count_to')){
-            $temp= array();
-
-            foreach ($categories as $elementKey => $element) {
-
-                if ($element->amount_product <= $request->count_to) {
-                    $temp[] = $element;
+                if ($request->filled('count_from')){
+                    if ($element->amount_product < $request->count_from) {
+                        unset($categories[$elementKey]);
+                    }
                 }
-
+                if ($request->filled('count_to')){
+                    if ($element->amount_product > $request->count_to) {
+                        unset($categories[$elementKey]);
+                    }
+                }
             }
-            $categories = $temp;
-        }
 
+            // dd($categories);
+        }
 
 
         return View('category.index', compact('categories'));
 
 
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -143,7 +121,7 @@ class CategoryController extends Controller
             $err=$category->getErrors();
             return redirect()->action('App\Http\Controllers\CategoryController@create')->with('errors',$err)->withInput();
         }
-        return redirect()->action('App\Http\Controllers\CategoryController@create')->with('message', 'New category '. $category->categoryname.' has been added!');
+        return redirect()->action('App\Http\Controllers\CategoryController@index')->with('message', 'New category '. $category->categoryname.' has been added!');
 
     }
 

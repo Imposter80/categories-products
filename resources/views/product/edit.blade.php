@@ -36,7 +36,7 @@
             </div>
             <div class="form-group">
                 <label for="price">Цена товара</label>
-                <input type="number" class="form-control"  name="price" value="{{ $product->price }}"/>
+                <input type="number" class="form-control" step="0.01" name="price" value="{{ $product->price }}"/>
             </div>
             <div class="form-group">
                 <label for="categoryid" class="col-sm-12 col-md-12 col-lg-12">Категории</label>
